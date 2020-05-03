@@ -34,7 +34,7 @@ export function changePerson(fullname: string,
     allPersons.set(context.sender, person);
 }
 
-export function findNear(entries: i32, degree: i32 = MAX_DEGREE): Person[] {
+export function findNear(entries: i32, degree: i32 = MAX_DEGREE, account: string = context.sender): Person[] {
     const me = getPerson();
     if(!me) return [];
     let quadrant = personToQuadrant(me, degree);

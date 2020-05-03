@@ -50,6 +50,13 @@ class App extends Component {
     this.setState({longtitude: response.longtitude});
   }
 
+  async searchFriends() {
+    const quantity = Number(document.getElementById('quantity'));
+    const response = await this.props.contract.findNear({ entries: quantity, account: accountId });
+    console.log('resp', response)
+    this.setState({friends: response});
+  }
+
   async requestSignIn() {
     const appTitle = 'NEAR React template';
     await this.props.wallet.requestSignIn(
@@ -116,7 +123,7 @@ class App extends Component {
               <option>200</option>
             </select>
             potential friends
-            <input type="button" value="Find!"/>
+            <input type="button" value="Find!" onClick={this.searchFriends.bind(this)}/>
           </p>
           <table style={{background: 'black'}}>
             <thead>
