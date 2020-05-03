@@ -131,7 +131,7 @@ class App extends Component {
             </thead>
             <tbody>
             {this.state.friends.map((person) => {
-              return <tr><td>{person.fullname}</td><td>{person.address}</td><td>{person.about}</td></tr>
+              return <tr><td>{person.fullname}</td><td>{person.address}</td><td>{person.description}</td></tr>
             })}
             </tbody>
           </table>

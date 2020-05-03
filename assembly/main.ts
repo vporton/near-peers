@@ -45,8 +45,15 @@ export function findNear(entries: i32, degree: i32 = MAX_DEGREE, account: string
       // Iterate nearby quadrants:
       // FIXME: Wrap at edges of the square Earth.
 
-      ++quadrant.x;
       let set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
+      if(persons.length > entries) break;
+      ++quadrant.x;
+      set = persistentCollectionForQuadrant(quadrant);
       if(set) {
           const values = set.values()
           for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
