@@ -41,15 +41,10 @@ class App extends Component {
   }
 
   async welcome() {
-    console.log("XXX")
     const response = await this.props.contract.getPersonFullname({ account_id: accountId });
-    console.log('response', response);
+    console.log('resp', response)
     if(!response) return;
-
-    // const response = await this.props.contract.getPerson({/* account_id: accountId */});
-    // console.log('response', response);
-    // if(!response) return;
-    // this.setState({speech: response.text});
+    this.setState({fullname: response});
   }
 
   async requestSignIn() {
@@ -100,12 +95,12 @@ class App extends Component {
           <p><span role="img" aria-label="fish">🐟</span> Find friends near you.<span role="img" aria-label="fish">🐟</span></p>
         </div>
         <div>
-          <p>Full name: <input id="fullname" value={this.props.fullname}/></p>
-          <p>Address: <input id="address" value={this.props.address}/></p>
+          <p>Full name: <input id="fullname" defaultValue={this.state.fullname}/></p>
+          <p>Address: <input id="address" defaultValue={this.state.address}/></p>
           <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
-            <textarea id="description">{this.props.description}</textarea></p>
-          <p>Latitude: <input type="number" id="latitude" value={this.props.latitude}/></p>
-          <p>Longtitude: <input type="number" id="longtitude" value={this.props.longtitude}/></p>
+            <textarea id="description">{this.state.description}</textarea></p>
+          <p>Latitude: <input type="number" id="latitude" defaultValue={this.state.latitude}/></p>
+          <p>Longtitude: <input type="number" id="longtitude" defaultValue={this.state.longtitude}/></p>
           <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
         </div>
         <div>

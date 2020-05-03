@@ -10,7 +10,7 @@ export function getWelcome(): string {
 }
 
 export function getPerson(): Person | null {
-    return allPersons.getSome(context.sender);
+    return allPersons.get(context.sender, null);
 }
 
 export function getPersonFullname(): string {
