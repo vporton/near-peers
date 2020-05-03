@@ -39,7 +39,7 @@ export function addCoords(account_id: string, latitude: u64, longtitude: u64): v
       quadrant = quadrant.parentQuadrant()
   ) {
       let set = persistentCollectionForQuadrant(quadrant);
-      set.add(coords.account_id);
+      set.add(account_id);
   }
 }
 
@@ -53,8 +53,8 @@ export function removeCoords(account_id: string): void {
       quadrant = quadrant.parentQuadrant()
   ) {
       let set = persistentCollectionForQuadrant(quadrant);
-      if(set.has(coords.account_id)) // FIXME: paniced without the check
-          set.delete(coords.account_id);
+      if(set.has(account_id)) // FIXME: paniced without the check
+          set.delete(account_id);
   }
 }
 
