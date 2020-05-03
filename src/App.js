@@ -10,7 +10,8 @@ class App extends Component {
     super(props);
     this.state = {
       login: false,
-      speech: null
+      speech: null,
+      friends: [],
     }
     this.signedInFlow = this.signedInFlow.bind(this);
     this.requestSignIn = this.requestSignIn.bind(this);
@@ -103,6 +104,30 @@ class App extends Component {
           <p>Latitude: <input type="number" id="latitude" defaultValue={this.state.latitude}/></p>
           <p>Longtitude: <input type="number" id="longtitude" defaultValue={this.state.longtitude}/></p>
           <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
+        </div>
+        <div>
+          <p>Find
+            <select id="quantity">
+              <option>10</option>
+              <option>20</option>
+              <option>30</option>
+              <option>50</option>
+              <option>100</option>
+              <option>200</option>
+            </select>
+            potential friends
+            <input type="button" value="Find!"/>
+          </p>
+          <table style={{background: 'black'}}>
+            <thead>
+              <tr><th>Name</th><th>Address</th><th>About</th></tr>
+            </thead>
+            <tbody>
+            {this.state.friends.map((person) => {
+              return <tr><td>{person.fullname}</td><td>{person.address}</td><td>{person.about}</td></tr>
+            })}
+            </tbody>
+          </table>
         </div>
         <div>
           {this.state.login ? 
