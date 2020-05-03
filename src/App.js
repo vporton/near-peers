@@ -47,8 +47,10 @@ class App extends Component {
     this.setState({fullname: response.fullname});
     this.setState({address: response.address});
     this.setState({description: response.description});
-    this.setState({latitude: i64ToLatitude(response.latitude)});
-    this.setState({longtitude: i64ToLongtitude(response.longtitude)});
+
+    const response2 = await this.props.contract.getCoords({ /*account_id: accountId,*/ account: accountId });
+    this.setState({latitude: i64ToLatitude(response2.latitude)});
+    this.setState({longtitude: i64ToLongtitude(response2.longtitude)});
   }
 
   async searchFriends() {

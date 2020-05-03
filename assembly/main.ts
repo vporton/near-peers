@@ -61,7 +61,8 @@ export function findNear(entries: i32, account: string = context.sender): Person
     if(set) {
         const values = set.values()
         for(let i: i32 = 0; i<values.length; ++i)
-            persons.push(allPersons.getSome(values[i]));
+            if(values[i] != account)
+                persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
     ++quadrant.x;
