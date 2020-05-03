@@ -44,6 +44,16 @@ export class Coords {
 }
 
 @nearBindgen
+export class PersonAndCoords {
+    person: Person;
+    coords: Coords;
+    constructor(person: Person, coords: Coords) {
+        this.person = person;
+        this.coords = coords;
+    }
+}
+
+@nearBindgen
 export class TextMessage {
     text: string; // FIXME: remove
 }
