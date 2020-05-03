@@ -9,8 +9,10 @@ export function getWelcome(): string {
     return "www";
 }
 
-export function getPerson(): Person | null {
-    return allPersons.get(context.sender, null);
+export function getPerson(account: string = context.sender): Person | null {
+    let person = allPersons.get(account, null);
+    //(<Person>person).address = "porton.testnet";
+    return person;
 }
 
 export function changePerson(fullname: string,

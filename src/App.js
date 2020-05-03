@@ -41,7 +41,7 @@ class App extends Component {
   }
 
   async welcome() {
-    const response = await this.props.contract.getPerson({ account_id: accountId });
+    const response = await this.props.contract.getPerson({ /*account_id: accountId,*/ account: accountId });
     this.setState({fullname: response.fullname});
     this.setState({address: response.address});
     this.setState({description: response.description});
