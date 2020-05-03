@@ -4,6 +4,7 @@ import logo from './assets/logo.svg';
 import nearlogo from './assets/gray_near_logo.svg';
 import near from './assets/near.svg';
 import './App.css';
+import { distance, latitudeToI64, longtitudeToI64, i64ToLatitude, i64ToLongtitude } from './earth';
 
 class App extends Component {
   constructor(props) {
@@ -46,8 +47,8 @@ class App extends Component {
     this.setState({fullname: response.fullname});
     this.setState({address: response.address});
     this.setState({description: response.description});
-    this.setState({latitude: (response.latitude / 2**64) * 180 - 90});
-    this.setState({longtitude: (response.longtitude / 2**64) * 360 - 180});
+    this.setState({latitude: i64ToLatitude(response.latitude)});
+    this.setState({longtitude: i64ToLongtitude(response.longtitude)});
   }
 
   async searchFriends() {
@@ -78,8 +79,8 @@ class App extends Component {
     person.fullname = document.getElementById('fullname').value;
     person.address = document.getElementById('address').value;
     person.description = document.getElementById('description').value;
-    person.latitude = String(Math.floor((Number(document.getElementById('latitude').value) + 90) / 180 * 2**64));
-    person.longtitude = String(Math.floor((Number(document.getElementById('longtitude').value) + 180) / 360 * 2**64));
+    person.latitude = latitudeToI64(Number(document.getElementById('latitude').value));
+    person.longtitude = longtitudeToI64(Number(document.getElementById('longtitude').value));
     await this.props.contract.changePerson(person);
   }
 
