@@ -52,10 +52,21 @@ class App extends Component {
   }
 
   async searchFriends() {
+    const me = await this.props.contract.getPerson({ account: accountId });
+
     const quantity = Number(document.getElementById('quantity').value);
     const response = await this.props.contract.findNear({ entries: quantity, account: accountId, degree: 20 });
+
+    response.sort((x) => distance(me.latitude, me.longtitude, x.latitude, x.longtitude));
+    if(response.length > quantity) response.length = quantity;
+
     const friends = response.map((person, index) => {
-      return <tr key={person.account_id}><td>{person.fullname}</td><td>{person.address}</td><td>{person.description}</td></tr>
+      return <tr key={person.account_id}>
+        <td>{person.fullname}</td>
+        <td>{person.address}</td>
+        <td>{person.description}</td>
+        <td>{distance(me.latitude, me.longtitude, person.latitude, person.longtitude)}</td>
+      </tr>
     })
     this.setState({friends: friends});
   }
@@ -130,7 +141,7 @@ class App extends Component {
           </p>
           <table style={{background: 'black'}}>
             <thead>
-              <tr><th>Name</th><th>Address</th><th>About</th></tr>
+              <tr><th>Name</th><th>Address</th><th>About</th><th>km</th></tr>
             </thead>
             <tbody>
             {this.state.friends}
