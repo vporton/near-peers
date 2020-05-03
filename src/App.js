@@ -16,7 +16,7 @@ class App extends Component {
     this.requestSignIn = this.requestSignIn.bind(this);
     this.requestSignOut = this.requestSignOut.bind(this);
     this.signedOutFlow = this.signedOutFlow.bind(this);
-    this.changeGreeting = this.changeGreeting.bind(this);
+    this.changePerson = this.changePerson.bind(this);
   }
 
   componentDidMount() {
@@ -59,7 +59,8 @@ class App extends Component {
     console.log("after sign out", this.props.wallet.isSignedIn())
   }
 
-  async changeGreeting() {
+  async changePerson() {
+    // FIXME
     await this.props.contract.setGreeting({ message: 'howdy' });
     await this.welcome();
   }
@@ -84,8 +85,7 @@ class App extends Component {
       <div className="App-header">
         <div className="image-wrapper">
           <img className="logo" src={nearlogo} alt="NEAR logo" />
-          <p><span role="img" aria-label="fish">🐟</span> NEAR protocol is a new blockchain focused on developer productivity and useability!<span role="img" aria-label="fish">🐟</span></p>
-          <p><span role="img" aria-label="chain">⛓</span> This little react app is connected to blockchain right now. <span role="img" aria-label="chain">⛓</span></p>
+          <p><span role="img" aria-label="fish">🐟</span> Find friends near you.<span role="img" aria-label="fish">🐟</span></p>
           <p style={style}>{this.state.speech}</p>
         </div>
         <div>
@@ -101,21 +101,6 @@ class App extends Component {
             <img src={near} className="App-logo margin-logo" alt="logo" />
             <img src={logo} className="App-logo" alt="logo" />
           </div>
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-          <p><span role="img" aria-label="net">🕸</span> <a className="App-link" href="https://nearprotocol.com">NEAR Website</a> <span role="img" aria-label="net">🕸</span>
-          </p>
-          <p><span role="img" aria-label="book">📚</span><a className="App-link" href="https://docs.nearprotocol.com"> Learn from NEAR Documentation</a> <span role="img" aria-label="book">📚</span>
-          </p>
         </div>
       </div>
     )
