@@ -60,7 +60,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     let set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -68,7 +68,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -76,7 +76,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -84,7 +84,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -92,7 +92,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -100,7 +100,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -108,7 +108,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -116,7 +116,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
@@ -124,7 +124,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
     set = persistentCollectionForQuadrant(quadrant);
     if(set) {
         const values = set.values()
-        for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+        for(let i: i32 = 0; i<values.length; ++i)
             persons.push(allPersons.getSome(values[i]));
     }
     if(persons.length > entries) return persons;
