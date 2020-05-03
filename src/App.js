@@ -118,6 +118,11 @@ class App extends Component {
           <p><span role="img" aria-label="fish">🐟</span> Find friends near you.<span role="img" aria-label="fish">🐟</span></p>
         </div>
         <div>
+          {this.state.login ? 
+              <button onClick={this.requestSignOut}>Log out</button>
+            : <button onClick={this.requestSignIn}>Log in with NEAR</button>}
+        </div>
+        <div>
           <p>Full name: <input id="fullname" defaultValue={this.state.fullname}/></p>
           <p>Address: <input id="address" defaultValue={this.state.address}/></p>
           <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
@@ -147,11 +152,6 @@ class App extends Component {
             {this.state.friends}
             </tbody>
           </table>
-        </div>
-        <div>
-          {this.state.login ? 
-              <button onClick={this.requestSignOut}>Log out</button>
-            : <button onClick={this.requestSignIn}>Log in with NEAR</button>}
         </div>
         <div>
           <div className="logo-wrapper">
