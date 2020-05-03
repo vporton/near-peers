@@ -18,7 +18,7 @@ export function changePerson(person: Person): void {
     allPersons.set(context.sender, person);
 }
 
-export function findNear(entries: number, degree: i32 = MAX_DEGREE): Person[] {
+export function findNear(entries: i32, degree: i32 = MAX_DEGREE): Person[] {
     const me = getPerson();
     if(!me) return [];
     let quadrant = personToQuadrant(me, degree);
@@ -28,37 +28,70 @@ export function findNear(entries: number, degree: i32 = MAX_DEGREE): Person[] {
     for(; degree >= 0; --degree) {
       // Iterate nearby quadrants:
       // FIXME: Wrap at edges of the square Earth.
-      const add = function(quadrant: Quadrant): void {
-          let set = persistentCollectionForQuadrant(quadrant);
-          if(set) {
-              const values = set.values()
-              for(let i=0; i<values.length; ++i) // TODO: for in
-                  persons.push(allPersons.getSome(values[i]));
-          }
+
+      ++quadrant.x;
+      let set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
       }
-      // ++quadrant.x;
-      add(quadrant);
       if(persons.length > entries) break;
-      // ++quadrant.y;
-      add(quadrant);
+      ++quadrant.y;
+      set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
       if(persons.length > entries) break;
-      // --quadrant.x;
-      add(quadrant);
+      --quadrant.x;
+      set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
       if(persons.length > entries) break;
-      // --quadrant.x;
-      add(quadrant);
+      --quadrant.x;
+      set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
       if(persons.length > entries) break;
-      // --quadrant.y;
-      add(quadrant);
+      --quadrant.y;
+      set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
       if(persons.length > entries) break;
-      // --quadrant.y;
-      add(quadrant);
+      --quadrant.y;
+      set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
       if(persons.length > entries) break;
-      // ++quadrant.x;
-      add(quadrant);
+      ++quadrant.x;
+      set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
       if(persons.length > entries) break;
-      // ++quadrant.x;
-      add(quadrant);
+      ++quadrant.x;
+      set = persistentCollectionForQuadrant(quadrant);
+      if(set) {
+          const values = set.values()
+          for(let i: i32 = 0; i<values.length; ++i) // TODO: for in
+              persons.push(allPersons.getSome(values[i]));
+      }
       if(persons.length > entries) break;
 
       let parent = quadrant.parentQuadrant();

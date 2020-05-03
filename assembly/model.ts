@@ -17,14 +17,15 @@ export class Quadrant {
     }
     parentQuadrant(): Quadrant | null {
         if(this.degree == 0) return null;
-        return new Quadrant(this.degree - 1, u64(this.x / 2), u64(this.y / 2));
+        return new Quadrant(this.degree - 1, <u64>0, <u64>0); // FIXME
+        // return new Quadrant(this.degree - 1, <u64>(this.x / 2), <u64>(this.y / 2)); // FIXME
     }
     toString(): String {
         return this.degree.toString() + '/' + this.x.toString() + '/' + this.y.toString();
     }
 }
 
-export const MAX_DEGREE = <i32>20;
+export const MAX_DEGREE: i32 = 20;
 
 @nearBindgen
 export class Person {
@@ -47,7 +48,8 @@ export function persistentCollectionForQuadrant(quadrant: Quadrant) : Persistent
 }
 
 export function personToQuadrant(person: Person, degree: i32 = MAX_DEGREE): Quadrant {
-    const k = i32(2**degree);
+    let k: i32 = 1; //2**degree
+    for(let i = 0; i < degree; ++i) k *= 2; // TODO: slow
     // FIXME
     const x = <i64>0;
     const y = <i64>0;
