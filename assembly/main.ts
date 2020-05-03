@@ -1,11 +1,11 @@
 import { context, logging, storage } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
-import { TextMessage, Person, allPersons,personsMap, addPerson, removePerson, MAX_DEGREE,
+import { TextMessage, Person, allPersons, persistentCollectionForQuadrant, addPerson, removePerson, MAX_DEGREE,
   personToQuadrant, Quadrant } from "./model";
 
 export function getPerson(): Person | null {
-    return persons.get(context.sender)
+    return allPersons.get(context.sender)
 }
 
 export function changePerson(person: Person): void {
@@ -18,7 +18,7 @@ export function changePerson(person: Person): void {
     allPersons.set(context.sender, person);
 }
 
-export function findNear(entries: number, degree: number = MAX_DEGREE): Person[] {
+export function findNear(entries: number, degree: i32 = MAX_DEGREE): Person[] {
     const me = getPerson();
     if(!me) return [];
     let quadrant = personToQuadrant(me, degree);
@@ -28,32 +28,36 @@ export function findNear(entries: number, degree: number = MAX_DEGREE): Person[]
     for(; degree >= 0; --degree) {
       // Iterate nearby quadrants:
       // FIXME: Wrap at edges of the square Earth.
-      function add(quadrant: Quadrant): void {
-          let set = personsMap.get(quadrant);
-          if(set) persons = persons.concat(set.values());
+      const add = function(quadrant: Quadrant): void {
+          let set = persistentCollectionForQuadrant(quadrant);
+          if(set) {
+              const values = set.values()
+              for(let i=0; i<values.length; ++i) // TODO: for in
+                  persons.push(allPersons.getSome(values[i]));
+          }
       }
-      ++quadrant.x;
+      // ++quadrant.x;
       add(quadrant);
       if(persons.length > entries) break;
-      ++quadrant.y;
+      // ++quadrant.y;
       add(quadrant);
       if(persons.length > entries) break;
-      --quadrant.x;
+      // --quadrant.x;
       add(quadrant);
       if(persons.length > entries) break;
-      --quadrant.x;
+      // --quadrant.x;
       add(quadrant);
       if(persons.length > entries) break;
-      --quadrant.y;
+      // --quadrant.y;
       add(quadrant);
       if(persons.length > entries) break;
-      --quadrant.y;
+      // --quadrant.y;
       add(quadrant);
       if(persons.length > entries) break;
-      ++quadrant.x;
+      // ++quadrant.x;
       add(quadrant);
       if(persons.length > entries) break;
-      ++quadrant.x;
+      // ++quadrant.x;
       add(quadrant);
       if(persons.length > entries) break;
 

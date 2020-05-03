@@ -5,28 +5,34 @@ import {
 
 // FIXME: We assume that the Earth is square. People living near Earth zero meridian can't find all peers.
 
+@nearBindgen
 export class Quadrant {
-    degree: number;
-    x: number;
-    y: number;
-    constructor(degree: number, x: number, y: number) {
+    degree: i32;
+    x: u64;
+    y: u64;
+    constructor(degree: i32, x: u64, y: u64) {
         this.degree = degree;
         this.x = x;
         this.y = y;
     }
     parentQuadrant(): Quadrant | null {
         if(this.degree == 0) return null;
-        return new Quadrant(this.degree - 1, Math.floor(this.x / 2), Math.floor(this.y / 2));
+        return new Quadrant(this.degree - 1, u64(this.x / 2), u64(this.y / 2));
+    }
+    toString(): String {
+        return this.degree.toString() + '/' + this.x.toString() + '/' + this.y.toString();
     }
 }
 
-export const MAX_DEGREE = 20;
+export const MAX_DEGREE = <i32>20;
 
+@nearBindgen
 export class Person {
+    account_id: string; // FIXME: assign it
     fullname: string;
     description: string;
-    latitude: number;
-    longtitude: number;
+    latitude: i64;
+    longtitude: i64;
 }
 
 @nearBindgen
@@ -36,17 +42,18 @@ export class TextMessage {
 
 export const allPersons = new PersistentMap<string, Person>("a"); // account ID -> Person
 
-export const personsMap = new PersistentMap<Quadrant, PersistentSet<Person>>("m");
-
-function persistentCollectionForQuadrant(quadrant: Quadrant) : PersistentSet<Person> {
-    return new PersistentSet("v"+quadrant.degree+'/'+quadrant.x+'/'+quadrant.y);
+export function persistentCollectionForQuadrant(quadrant: Quadrant) : PersistentSet<string> {
+    return new PersistentSet<string>("v" + quadrant.toString());
 }
 
-export function personToQuadrant(person: Person, degree: number = MAX_DEGREE): Quadrant {
-    const k = 2**degree;
-    let x = Math.floor(((person.latitude+90) / 180) * k);
-    let y = Math.floor(((person.longtitude+180) / 360) * k);
-    return new Quadrant(degree, x, y);
+export function personToQuadrant(person: Person, degree: i32 = MAX_DEGREE): Quadrant {
+    const k = i32(2**degree);
+    // FIXME
+    const x = <i64>0;
+    const y = <i64>0;
+    // const x = i64(Math.floor(((person.latitude as number) / 2**32) * k));
+    // const y = i64(Math.floor(((person.longtitude as number) / 2**32) * k));
+    return new Quadrant(k, x, y);
 }
 
 // TODO: Duplicate code with the below.
@@ -54,8 +61,7 @@ export function addPerson(person: Person): void {
     for(let degree = MAX_DEGREE; degree >= 0; --degree) {
         let quadrant = personToQuadrant(person, degree);
         let set = persistentCollectionForQuadrant(quadrant);
-        personsMap.set(quadrant, set);
-        set.add(person);
+        set.add(person.account_id);
     }
 }
 
@@ -64,6 +70,6 @@ export function removePerson(person: Person): void {
     for(let degree = MAX_DEGREE; degree >= 0; --degree) {
         let quadrant = personToQuadrant(person, degree);
         let set = persistentCollectionForQuadrant(quadrant);
-        set.delete(person);
+        set.delete(person.account_id);
     }
 }
