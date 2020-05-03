@@ -64,7 +64,6 @@ class App extends Component {
   }
 
   async changePerson() {
-    // FIXME
     let person = {};
     person.fullname = document.getElementById('fullname').value;
     person.address = document.getElementById('address').value;
