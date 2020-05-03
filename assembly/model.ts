@@ -50,9 +50,6 @@ export function persistentCollectionForQuadrant(quadrant: Quadrant) : Persistent
 export function personToQuadrant(person: Person, degree: i32 = MAX_DEGREE): Quadrant {
     let k: i32 = 1; //2**degree
     for(let i = 0; i < degree; ++i) k *= 2; // TODO: slow
-    // FIXME
-    // const x = <i64>0;
-    // const y = <i64>0;
     const x = i64((person.latitude >> 32) * k);
     const y = i64((person.longtitude >> 32) * k);
     return new Quadrant(k, x, y);
