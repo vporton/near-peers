@@ -29392,7 +29392,7 @@ class App extends _react.Component {
 var _default = App;
 exports.default = _default;
 },{"regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","react":"../node_modules/react/index.js","./assets/logo.svg":"assets/logo.svg","./assets/gray_near_logo.svg":"assets/gray_near_logo.svg","./assets/near.svg":"assets/near.svg","./App.css":"App.css","./earth":"earth.js"}],"config.js":[function(require,module,exports) {
-const CONTRACT_NAME = "dev-1588465891790" || 'nearpeers3';
+const CONTRACT_NAME = "dev-1588542478441" || 'nearpeers3';
 
 function getConfig(env) {
   switch (env) {
@@ -50288,7 +50288,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "41963" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37621" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
