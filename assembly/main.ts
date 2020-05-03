@@ -29,7 +29,8 @@ export function changePerson(fullname: string,
 }
 
 // TODO: Duplicate code with the below.
-export function addCoords(coords: Coords): void {
+export function addCoords(account_id: string, latitude: u64, longtitude: u64): void {
+  const coords = new Coords(account_id, latitude, longtitude);
   allPersonCoords.set(coords.account_id, coords);
   for(let quadrant: Quadrant = coordsToQuadrant(coords, MAX_DEGREE);
       quadrant.degree >= MIN_DEGREE;
@@ -41,9 +42,10 @@ export function addCoords(coords: Coords): void {
 }
 
 // TODO: Duplicate code with the above.
-export function removeCoords(coords: Coords): void {
-  if(allPersonCoords.contains(coords.account_id)) // FIXME: paniced without the check
-      allPersonCoords.delete(coords.account_id);
+export function removeCoords(account_id: string): void {
+  const coords = allPersonCoords.get(account_id, null);
+  if(!coords) return;
+  allPersonCoords.delete(coords.account_id);
   for(let quadrant: Quadrant = coordsToQuadrant(coords, MAX_DEGREE);
       quadrant.degree >= MIN_DEGREE;
       quadrant = quadrant.parentQuadrant()

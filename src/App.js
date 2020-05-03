@@ -90,9 +90,16 @@ class App extends Component {
     person.fullname = document.getElementById('fullname').value;
     person.address = document.getElementById('address').value;
     person.description = document.getElementById('description').value;
-    person.latitude = latitudeToI64(Number(document.getElementById('latitude').value));
-    person.longtitude = longtitudeToI64(Number(document.getElementById('longtitude').value));
     await this.props.contract.changePerson(person);
+    alert("Person data changed.")
+  }
+
+  async movePerson() {
+    const latitude = latitudeToI64(Number(document.getElementById('latitude').value));
+    const longtitude = longtitudeToI64(Number(document.getElementById('longtitude').value));
+    await this.props.contract.removeCoords({ account_id: accountId });
+    await this.props.contract.addCoords({ account_id: accountId, latitude: latitude, longtitude: longtitude });
+    alert("Person coordinates changedd");
   }
 
   signedOutFlow() {
@@ -127,9 +134,10 @@ class App extends Component {
           <p>Address: <input id="address" defaultValue={this.state.address}/></p>
           <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
             <textarea id="description" defaultValue={this.state.description}></textarea></p>
+          <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
           <p>Latitude: <input type="text" id="latitude" defaultValue={this.state.latitude}/></p>
           <p>Longtitude: <input type="text" id="longtitude" defaultValue={this.state.longtitude}/></p>
-          <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
+          <p><input type="button" value="Move" onClick={this.movePerson}/></p>
         </div>
         <div>
           <p>Find

@@ -40,9 +40,14 @@ export class Person {
 
 @nearBindgen
 export class Coords {
-    account_id: string; // FIXME: assign it
+    account_id: string;
     latitude: u64; // 0 = -90 degrees, 2^64-1 = 90 degrees
     longtitude: u64; // 0 = -180 degrees, 2^64-1 = 180 degrees
+    constructor(account_id: string, latitude: u64, longtitude: u64) {
+        this.account_id = account_id;
+        this.latitude = latitude;
+        this.longtitude = longtitude;
+    }
 }
 
 @nearBindgen
