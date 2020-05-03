@@ -23,8 +23,8 @@ export function changePerson(fullname: string,
     person.latitude = latitude;
     person.longtitude = longtitude;
     const oldPerson = getPerson();
-    if(!oldPerson) {
-        removePerson(person);
+    if(oldPerson) {
+        removePerson(oldPerson);
         allPersons.delete(context.sender);
     }
     addPerson(person);
