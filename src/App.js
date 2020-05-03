@@ -78,8 +78,8 @@ class App extends Component {
     person.fullname = document.getElementById('fullname').value;
     person.address = document.getElementById('address').value;
     person.description = document.getElementById('description').value;
-    person.latitude = String(Math.floor(Number(document.getElementById('latitude').value) + 90) / 180 * 2**64);
-    person.longtitude = String(Math.floor(Number(document.getElementById('longtitude').value) + 180) / 360 * 2**64);
+    person.latitude = String(Math.floor((Number(document.getElementById('latitude').value) + 90) / 180 * 2**64));
+    person.longtitude = String(Math.floor((Number(document.getElementById('longtitude').value) + 180) / 360 * 2**64));
     await this.props.contract.changePerson(person);
   }
 
@@ -110,8 +110,8 @@ class App extends Component {
           <p>Address: <input id="address" defaultValue={this.state.address}/></p>
           <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
             <textarea id="description" defaultValue={this.state.description}></textarea></p>
-          <p>Latitude: <input type="number" id="latitude" defaultValue={this.state.latitude}/></p>
-          <p>Longtitude: <input type="number" id="longtitude" defaultValue={this.state.longtitude}/></p>
+          <p>Latitude: <input type="text" id="latitude" defaultValue={this.state.latitude}/></p>
+          <p>Longtitude: <input type="text" id="longtitude" defaultValue={this.state.longtitude}/></p>
           <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
         </div>
         <div>
