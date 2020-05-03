@@ -41,9 +41,14 @@ class App extends Component {
   }
 
   async welcome() {
-    const response = await this.props.contract.getPerson({/* account_id: accountId */});
+    console.log("XXX")
+    const response = await this.props.contract.getPersonFullname({ account_id: accountId });
     console.log('response', response);
     if(!response) return;
+
+    // const response = await this.props.contract.getPerson({/* account_id: accountId */});
+    // console.log('response', response);
+    // if(!response) return;
     // this.setState({speech: response.text});
   }
 

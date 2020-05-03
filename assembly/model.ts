@@ -72,3 +72,8 @@ export function removePerson(person: Person): void {
         set.delete(person.account_id);
     }
 }
+
+export class Person1 {
+    fullname: string;
+}
+
