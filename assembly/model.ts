@@ -31,6 +31,7 @@ export const MAX_DEGREE: i32 = 20;
 export class Person {
     account_id: string; // FIXME: assign it
     fullname: string;
+    address: string;
     description: string;
     latitude: i64;
     longtitude: i64;

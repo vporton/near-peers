@@ -86,14 +86,19 @@ class App extends Component {
         <div className="image-wrapper">
           <img className="logo" src={nearlogo} alt="NEAR logo" />
           <p><span role="img" aria-label="fish">🐟</span> Find friends near you.<span role="img" aria-label="fish">🐟</span></p>
-          <p style={style}>{this.state.speech}</p>
+        </div>
+        <div>
+          <p>Full name: <input id="fullname"/></p>
+          <p>Address: <input id="address"/></p>
+          <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
+            <textarea id="description"></textarea></p>
+          <p>Latitude: <input type="number" id="latitude"/></p>
+          <p>Longtitude: <input type="number" id="longtitude"/></p>
+          <p><input type="button" value="Change your data" onclick={this.chagePerson}/></p>
         </div>
         <div>
           {this.state.login ? 
-            <div>
               <button onClick={this.requestSignOut}>Log out</button>
-              <button onClick={this.changeGreeting}>Change greeting</button>
-            </div>
             : <button onClick={this.requestSignIn}>Log in with NEAR</button>}
         </div>
         <div>
