@@ -14,8 +14,28 @@ export function getPerson(): Person | null {
 }
 
 export function getPersonFullname(): string {
-    const person: Person | null = allPersons.get(context.sender);
-    return person ? person.fullname : "";
+  const person: Person | null = allPersons.get(context.sender);
+  return person ? person.fullname : "";
+}
+
+export function getPersonAddress(): string {
+  const person: Person | null = allPersons.get(context.sender);
+  return person ? person.address : "";
+}
+
+export function getPersonDescription(): string {
+  const person: Person | null = allPersons.get(context.sender);
+  return person ? person.description : "";
+}
+
+export function getPersonLatitude(): i64 {
+  const person: Person | null = allPersons.get(context.sender);
+  return person ? person.latitude : 0;
+}
+
+export function getPersonLongtitude(): i64 {
+  const person: Person | null = allPersons.get(context.sender);
+  return person ? person.longtitude : 0;
 }
 
 // export interface PersonData 

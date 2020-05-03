@@ -41,10 +41,17 @@ class App extends Component {
   }
 
   async welcome() {
-    const response = await this.props.contract.getPersonFullname({ account_id: accountId });
-    console.log('resp', response)
-    if(!response) return;
+    let response;
+    response = await this.props.contract.getPersonFullname({ account_id: accountId });
     this.setState({fullname: response});
+    response = await this.props.contract.getPersonAddress({ account_id: accountId });
+    this.setState({address: response});
+    response = await this.props.contract.getPersonDescription({ account_id: accountId });
+    this.setState({description: response});
+    response = await this.props.contract.getPersonLatitude({ account_id: accountId });
+    this.setState({latitude: response});
+    response = await this.props.contract.getPersonLongtitude({ account_id: accountId });
+    this.setState({longtitude: response});
   }
 
   async requestSignIn() {
