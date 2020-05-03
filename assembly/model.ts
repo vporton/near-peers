@@ -18,8 +18,8 @@ class Person {
 @nearBindgen
 export class TextMessage {
     text: string; // FIXME: remove
-    map: any;
     constructor() {
-        this.map = new PersistentMap<Quadrant, Person[]>("m");
     }
 }
+
+export const personsMap = new PersistentMap<Quadrant, Person[]>("m");
