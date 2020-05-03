@@ -1,8 +1,8 @@
 import { context, logging, storage } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
-import { TextMessage, Person, allPersons, persistentCollectionForQuadrant, addPerson, removePerson, MAX_DEGREE,
-  personToQuadrant, Quadrant, MIN_DEGREE } from "./model";
+import { Person, Coords, allPersons, allPersonCoords, persistentCollectionForQuadrant, addCoords, removeCoords, MAX_DEGREE,
+  coordsToQuadrant, Quadrant, MIN_DEGREE } from "./model";
 
 // FIXME: remove
 export function getWelcome(): string {
@@ -23,15 +23,35 @@ export function changePerson(fullname: string,
     person.fullname = fullname;
     person.address = address;
     person.description = description;
-    person.latitude = latitude;
-    person.longtitude = longtitude;
     const oldPerson = getPerson();
-    if(oldPerson) {
-        removePerson(oldPerson);
-        allPersons.delete(context.sender);
-    }
-    addPerson(person);
+    if(oldPerson) allPersons.delete(context.sender);
     allPersons.set(context.sender, person);
+}
+
+// TODO: Duplicate code with the below.
+export function addCoords(coords: Coords): void {
+  allPersonCoords.set(coords.account_id, coords);
+  for(let quadrant: Quadrant = coordsToQuadrant(coords, MAX_DEGREE);
+      quadrant.degree >= MIN_DEGREE;
+      quadrant = quadrant.parentQuadrant()
+  ) {
+      let set = persistentCollectionForQuadrant(quadrant);
+      set.add(coords.account_id);
+  }
+}
+
+// TODO: Duplicate code with the above.
+export function removeCoords(coords: Coords): void {
+  if(allPersonCoords.contains(coords.account_id)) // FIXME: paniced without the check
+      allPersonCoords.delete(coords.account_id);
+  for(let quadrant: Quadrant = coordsToQuadrant(coords, MAX_DEGREE);
+      quadrant.degree >= MIN_DEGREE;
+      quadrant = quadrant.parentQuadrant()
+  ) {
+      let set = persistentCollectionForQuadrant(quadrant);
+      if(set.has(coords.account_id)) // FIXME: paniced without the check
+          set.delete(coords.account_id);
+  }
 }
 
 export function findNear(entries: i32, account: string = context.sender): Person[] {
@@ -39,7 +59,7 @@ export function findNear(entries: i32, account: string = context.sender): Person
   
     const me = getPerson(account);
     if(!me) return [];
-    let quadrant = personToQuadrant(me, degree);
+    let quadrant = coordsToQuadrant(me, degree);
 
     let persons: Person[] = [];
 

@@ -36,6 +36,11 @@ export class Person {
     fullname: string;
     address: string;
     description: string;
+}
+
+@nearBindgen
+export class Coords {
+    account_id: string; // FIXME: assign it
     latitude: u64; // 0 = -90 degrees, 2^64-1 = 90 degrees
     longtitude: u64; // 0 = -180 degrees, 2^64-1 = 180 degrees
 }
@@ -46,38 +51,16 @@ export class TextMessage {
 }
 
 export const allPersons = new PersistentMap<string, Person>("a"); // account ID -> Person
+export const allPersonCoords = new PersistentMap<string, Coords>("L"); // account ID -> Coords
 
 export function persistentCollectionForQuadrant(quadrant: Quadrant) : PersistentSet<string> {
     return new PersistentSet<string>("v" + quadrant.toString());
 }
 
-export function personToQuadrant(person: Person, degree: i32 = MAX_DEGREE): Quadrant {
+export function coordsToQuadrant(coords: Coords, degree: i32 = MAX_DEGREE): Quadrant {
     let k: i32 = 1 << degree;
     // TODO: Working but silly and inexact formulas:
-    const x = i64((person.latitude >> 32) * k) >> 32;
-    const y = i64((person.longtitude >> 32) * k) >> 32;
+    const x = i64((coords.latitude >> 32) * k) >> 32;
+    const y = i64((coords.longtitude >> 32) * k) >> 32;
     return new Quadrant(k, x, y);
-}
-
-// TODO: Duplicate code with the below.
-export function addPerson(person: Person): void {
-    for(let quadrant: Quadrant = personToQuadrant(person, MAX_DEGREE);
-        quadrant.degree >= MIN_DEGREE;
-        quadrant = quadrant.parentQuadrant()
-    ) {
-        let set = persistentCollectionForQuadrant(quadrant);
-        set.add(person.account_id);
-    }
-}
-
-// TODO: Duplicate code with the above.
-export function removePerson(person: Person): void {
-    for(let quadrant: Quadrant = personToQuadrant(person, MAX_DEGREE);
-        quadrant.degree >= MIN_DEGREE;
-        quadrant = quadrant.parentQuadrant()
-    ) {
-        let set = persistentCollectionForQuadrant(quadrant);
-        if(set.has(person.account_id)) // FIXME: paniced without the check
-            set.delete(person.account_id);
-    }
 }
