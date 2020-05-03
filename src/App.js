@@ -53,8 +53,10 @@ class App extends Component {
   async searchFriends() {
     const quantity = Number(document.getElementById('quantity').value);
     const response = await this.props.contract.findNear({ entries: quantity, account: accountId, degree: 20 });
-    console.log('resp', response)
-    this.setState({friends: response});
+    const friends = response.map((person, index) => {
+      return <tr key={person.account_id}><td>{person.fullname}</td><td>{person.address}</td><td>{person.description}</td></tr>
+    })
+    this.setState({friends: friends});
   }
 
   async requestSignIn() {
@@ -130,9 +132,7 @@ class App extends Component {
               <tr><th>Name</th><th>Address</th><th>About</th></tr>
             </thead>
             <tbody>
-            {this.state.friends.map((person) => {
-              return <tr><td>{person.fullname}</td><td>{person.address}</td><td>{person.description}</td></tr>
-            })}
+            {this.state.friends}
             </tbody>
           </table>
         </div>
