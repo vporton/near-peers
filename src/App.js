@@ -55,7 +55,7 @@ class App extends Component {
     const me = await this.props.contract.getPerson({ account: accountId });
 
     const quantity = Number(document.getElementById('quantity').value);
-    const response = await this.props.contract.findNear({ entries: quantity, account: accountId, degree: 20 });
+    const response = await this.props.contract.findNear({ entries: quantity, account: accountId, degree: 8 });
 
     response.sort((x) => distance(me.latitude, me.longtitude, x.latitude, x.longtitude));
     if(response.length > quantity) response.length = quantity;

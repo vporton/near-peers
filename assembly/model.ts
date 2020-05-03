@@ -25,7 +25,8 @@ export class Quadrant {
     }
 }
 
-export const MAX_DEGREE: i32 = 20;
+// export const MAX_DEGREE: i32 = 20; // exceeds gas
+export const MAX_DEGREE: i32 = 8//10;
 
 @nearBindgen
 export class Person {
@@ -50,15 +51,18 @@ export function persistentCollectionForQuadrant(quadrant: Quadrant) : Persistent
 
 export function personToQuadrant(person: Person, degree: i32 = MAX_DEGREE): Quadrant {
     let k: i32 = 1 << degree;
-    const x = i64((person.latitude >> 64) * k);
-    const y = i64((person.longtitude >> 64) * k);
+    // TODO: Working but silly and inexact formulas:
+    const x = i64((person.latitude >> 32) * k) >> 32;
+    const y = i64((person.longtitude >> 32) * k) >> 32;
     return new Quadrant(k, x, y);
 }
 
 // TODO: Duplicate code with the below.
 export function addPerson(person: Person): void {
-    for(let degree = MAX_DEGREE; degree >= 0; --degree) {
-        let quadrant = personToQuadrant(person, degree);
+    for(let quadrant: Quadrant | null = personToQuadrant(person, MAX_DEGREE);
+        quadrant;
+        quadrant = quadrant.parentQuadrant()
+    ) {
         let set = persistentCollectionForQuadrant(quadrant);
         set.add(person.account_id);
     }
@@ -66,8 +70,10 @@ export function addPerson(person: Person): void {
 
 // TODO: Duplicate code with the above.
 export function removePerson(person: Person): void {
-    for(let degree = MAX_DEGREE; degree >= 0; --degree) {
-        let quadrant = personToQuadrant(person, degree);
+    for(let quadrant: Quadrant | null = personToQuadrant(person, MAX_DEGREE);
+        quadrant;
+        quadrant = quadrant.parentQuadrant()
+    ) {
         let set = persistentCollectionForQuadrant(quadrant);
         if(set.has(person.account_id)) // FIXME: paniced without the check
             set.delete(person.account_id);
