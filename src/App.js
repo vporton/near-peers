@@ -41,8 +41,10 @@ class App extends Component {
   }
 
   async welcome() {
-    const response = await this.props.contract.welcome({ account_id: accountId });
-    this.setState({speech: response.text});
+    const response = await this.props.contract.getPerson({/* account_id: accountId */});
+    console.log('response', response);
+    if(!response) return;
+    // this.setState({speech: response.text});
   }
 
   async requestSignIn() {
@@ -61,8 +63,13 @@ class App extends Component {
 
   async changePerson() {
     // FIXME
-    await this.props.contract.setGreeting({ message: 'howdy' });
-    await this.welcome();
+    let person = {};
+    person.fullname = document.getElementById('fullname').value;
+    person.address = document.getElementById('address').value;
+    person.description = document.getElementById('description').value;
+    person.latitude = document.getElementById('latitude').value;
+    person.longtitude = document.getElementById('longtitude').value;
+    await this.props.contract.changePerson(person);
   }
 
   signedOutFlow() {
@@ -88,13 +95,13 @@ class App extends Component {
           <p><span role="img" aria-label="fish">🐟</span> Find friends near you.<span role="img" aria-label="fish">🐟</span></p>
         </div>
         <div>
-          <p>Full name: <input id="fullname"/></p>
-          <p>Address: <input id="address"/></p>
+          <p>Full name: <input id="fullname" value={this.props.fullname}/></p>
+          <p>Address: <input id="address" value={this.props.address}/></p>
           <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
-            <textarea id="description"></textarea></p>
-          <p>Latitude: <input type="number" id="latitude"/></p>
-          <p>Longtitude: <input type="number" id="longtitude"/></p>
-          <p><input type="button" value="Change your data" onclick={this.chagePerson}/></p>
+            <textarea id="description">{this.props.description}</textarea></p>
+          <p>Latitude: <input type="number" id="latitude" value={this.props.latitude}/></p>
+          <p>Longtitude: <input type="number" id="longtitude" value={this.props.longtitude}/></p>
+          <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
         </div>
         <div>
           {this.state.login ? 

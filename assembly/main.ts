@@ -8,8 +8,20 @@ export function getPerson(): Person | null {
     return allPersons.get(context.sender)
 }
 
-export function changePerson(person: Person): void {
+// export interface PersonData 
+
+export function changePerson(fullname: string,
+                             address: string,
+                             description: string,
+                             latitude: i64,
+                             longtitude: i64): void {
+    let person = new Person();
     person.account_id = context.sender;
+    person.fullname = fullname;
+    person.address = address;
+    person.description = description;
+    person.latitude = latitude;
+    person.longtitude = longtitude;
     const oldPerson = getPerson();
     if(!oldPerson) {
         removePerson(person);
