@@ -43,11 +43,12 @@ export function addCoords(account_id: string, latitude: u64, longtitude: u64): v
 export function removeCoords(account_id: string): void {
   const coords = allPersonCoords.get(account_id, null);
   if(!coords) return;
-  allPersonCoords.delete(coords.account_id);
+  if(allPersonCoords.contains(account_id)) // FIXME: paniced without the check?
+    allPersonCoords.delete(account_id);
   let quadrant: Quadrant = coordsToQuadrant(coords);
-    let set = persistentCollectionForQuadrant(quadrant);
-    if(set.has(account_id)) // FIXME: paniced without the check
-        set.delete(account_id);
+  let set = persistentCollectionForQuadrant(quadrant);
+  if(set.has(account_id)) // FIXME: paniced without the check
+      set.delete(account_id);
 }
 
 export function findNear(entries: i32, account: string = context.sender): PersonAndCoords[] {
@@ -61,9 +62,8 @@ export function findNear(entries: i32, account: string = context.sender): Person
     if(set) {
         const values = set.values()
         for(let i: i32 = 0; i<values.length; ++i)
-            if(values[i] != account) {
+            if(values[i] != account)
                 persons.push(new PersonAndCoords(allPersons.getSome(values[i]), allPersonCoords.getSome(values[i])));
-            }
     }
     if(persons.length > entries) return persons;
     ++quadrant.x;
