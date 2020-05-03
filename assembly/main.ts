@@ -1,26 +1,22 @@
 import { context, logging, storage } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
-import { TextMessage } from "./model";
+import { TextMessage, Person, persons, addPerson, removePerson, MAX_DEGREE, personToQuadrant } from "./model";
 
-const DEFAULT_MESSAGE = "Hello"
-
-export function welcome(account_id: string): TextMessage {
-  logging.log("simple welcome test");
-  let message = new TextMessage();
-  let greetingPrefix = storage.get<string>(account_id);
-  if (!greetingPrefix) {
-    greetingPrefix = DEFAULT_MESSAGE;
-  }
-  const s = printString(account_id);
-  message.text = greetingPrefix + " " + s;
-  return message;
+export function getPerson(): Person {
+    return persons.get(context.sender)
 }
 
-export function setGreeting(message: string): void {
-  storage.set(context.sender, message);
+export function changePerson(person: Person): void {
+    const oldPerson = getPerson();
+    if(!oldPerson) {
+        removePerson(person);
+        persons.delete(context.sender);
+    }
+    addPerson(person);
+    persons.set(context.sender, person);
 }
 
-function printString(s: string): string {
-  return s;
+export function findNear(degree: number = MAX_DEGREE) {
+    let quadrant = personToQuadrant(getPerson(), degree);
 }

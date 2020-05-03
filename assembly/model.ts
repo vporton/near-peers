@@ -20,23 +20,21 @@ class Quadrant {
     }
 }
 
-const MAX_DEGREE = 20;
+export const MAX_DEGREE = 20;
 
-class Person {
+export class Person {
     fullname: string;
+    description: string;
     latitude: number;
     longtitude: number;
-    setCoords(latitude: number, longtitude: number) {
-        
-    }
 }
 
 @nearBindgen
 export class TextMessage {
     text: string; // FIXME: remove
-    constructor() {
-    }
 }
+
+export const persons = new PersistentMap<string, Person>("a"); // account ID -> Person
 
 export const personsMap = new PersistentMap<Quadrant, PersistentSet<Person>>("m");
 
@@ -44,13 +42,17 @@ function persistentCollectionForQuadrant(quadrant: Quadrant) : PersistentSet<Per
     return new PersistentSet("v"+quadrant.degree+'/'+quadrant.x+'/'+quadrant.y);
 }
 
+export function personToQuadrant(person: Person, degree: number = MAX_DEGREE): Quadrant {
+    const k = 2**degree;
+    let x = Math.floor(((person.latitude+90) / 180) * k);
+    let y = Math.floor(((person.longtitude+180) / 360) * k);
+    return new Quadrant(degree, x, y);
+}
+
 // TODO: Duplicate code with the below.
-function addPerson(person: Person): void {
+export function addPerson(person: Person): void {
     for(let degree = MAX_DEGREE; degree >= 0; --degree) {
-        const k = 2**degree;
-        let x = Math.floor(((person.latitude+90) / 180) * k);
-        let y = Math.floor(((person.longtitude+180) / 360) * k);
-        let quadrant = new Quadrant(degree, x, y);
+        let quadrant = personToQuadrant(person, degree);
         let set = persistentCollectionForQuadrant(quadrant);
         personsMap.set(quadrant, set);
         set.add(person);
@@ -58,12 +60,9 @@ function addPerson(person: Person): void {
 }
 
 // TODO: Duplicate code with the above.
-function removePerson(person: Person): void {
+export function removePerson(person: Person): void {
     for(let degree = MAX_DEGREE; degree >= 0; --degree) {
-        const k = 2**degree;
-        let x = Math.floor(((person.latitude+90) / 180) * k);
-        let y = Math.floor(((person.longtitude+180) / 360) * k);
-        let quadrant = new Quadrant(degree, x, y);
+        let quadrant = personToQuadrant(person, degree);
         let set = persistentCollectionForQuadrant(quadrant);
         set.delete(person);
     }
