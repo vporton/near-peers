@@ -15,20 +15,13 @@ export class Quadrant {
         this.x = x;
         this.y = y;
     }
-    // We don't reach degree 0
-    parentQuadrant(): Quadrant /*| null*/ {
-        //if(this.degree == 0) return null;
-        // return new Quadrant(this.degree - 1, <u64>0, <u64>0); // FIXME
-        return new Quadrant(this.degree - 1, <u64>(this.x / 2), <u64>(this.y / 2)); // FIXME
-    }
     toString(): String {
-        return this.degree.toString() + '/' + this.x.toString() + '/' + this.y.toString();
+        return this.x.toString() + '/' + this.y.toString();
     }
 }
 
 // Should not exceeds gas
-export const MIN_DEGREE: i32 = 11; // 10
-export const MAX_DEGREE: i32 = 11;
+export const DEGREE: i32 = 11; // 10
 
 @nearBindgen
 export class Person {
@@ -62,8 +55,8 @@ export function persistentCollectionForQuadrant(quadrant: Quadrant) : Persistent
     return new PersistentSet<string>("v" + quadrant.toString());
 }
 
-export function coordsToQuadrant(coords: Coords, degree: i32 = MAX_DEGREE): Quadrant {
-    let k: i32 = 1 << degree;
+export function coordsToQuadrant(coords: Coords): Quadrant {
+    let k: i32 = 1 << DEGREE;
     // TODO: Working but silly and inexact formulas:
     const x = i64((coords.latitude >> 32) * k) >> 32;
     const y = i64((coords.longtitude >> 32) * k) >> 32;
