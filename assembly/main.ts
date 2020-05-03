@@ -10,9 +10,7 @@ export function getWelcome(): string {
 }
 
 export function getPerson(account: string = context.sender): Person | null {
-    let person = allPersons.get(account, null);
-    //(<Person>person).address = "porton.testnet";
-    return person;
+    return allPersons.get(account, null);
 }
 
 export function changePerson(fullname: string,
