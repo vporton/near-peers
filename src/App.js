@@ -100,7 +100,7 @@ class App extends Component {
           <p>Full name: <input id="fullname" defaultValue={this.state.fullname}/></p>
           <p>Address: <input id="address" defaultValue={this.state.address}/></p>
           <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
-            <textarea id="description">{this.state.description}</textarea></p>
+            <textarea id="description" defaultValue={this.state.description}></textarea></p>
           <p>Latitude: <input type="number" id="latitude" defaultValue={this.state.latitude}/></p>
           <p>Longtitude: <input type="number" id="longtitude" defaultValue={this.state.longtitude}/></p>
           <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
