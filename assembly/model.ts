@@ -33,8 +33,8 @@ export class Person {
     fullname: string;
     address: string;
     description: string;
-    latitude: i64; // 0 = -90 degrees, 2^64-1 = 90 degrees
-    longtitude: i64; // 0 = -180 degrees, 2^64-1 = 180 degrees
+    latitude: u64; // 0 = -90 degrees, 2^64-1 = 90 degrees
+    longtitude: u64; // 0 = -180 degrees, 2^64-1 = 180 degrees
 }
 
 @nearBindgen
