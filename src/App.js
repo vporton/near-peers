@@ -51,8 +51,8 @@ class App extends Component {
   }
 
   async searchFriends() {
-    const quantity = Number(document.getElementById('quantity'));
-    const response = await this.props.contract.findNear({ entries: quantity, account: accountId });
+    const quantity = Number(document.getElementById('quantity').value);
+    const response = await this.props.contract.findNear({ entries: quantity, account: accountId, degree: 20 });
     console.log('resp', response)
     this.setState({friends: response});
   }
