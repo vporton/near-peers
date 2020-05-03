@@ -2,7 +2,7 @@ import { context, logging, storage } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
 import { TextMessage, Person, allPersons, persistentCollectionForQuadrant, addPerson, removePerson, MAX_DEGREE,
-  personToQuadrant, Quadrant } from "./model";
+  personToQuadrant, Quadrant, MIN_DEGREE } from "./model";
 
 // FIXME: remove
 export function getWelcome(): string {
@@ -34,14 +34,16 @@ export function changePerson(fullname: string,
     allPersons.set(context.sender, person);
 }
 
-export function findNear(entries: i32, degree: i32 = MAX_DEGREE, account: string = context.sender): Person[] {
+export function findNear(entries: i32, account: string = context.sender): Person[] {
+    let degree: i32 = MAX_DEGREE;
+  
     const me = getPerson(account);
     if(!me) return [];
     let quadrant = personToQuadrant(me, degree);
 
     let persons: Person[] = [];
 
-    for(; degree >= 0; --degree) {
+    for(; degree >= MIN_DEGREE; --degree) {
       // Iterate nearby quadrants:
       // FIXME: Wrap at edges of the square Earth.
 

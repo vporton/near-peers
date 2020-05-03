@@ -15,8 +15,9 @@ export class Quadrant {
         this.x = x;
         this.y = y;
     }
-    parentQuadrant(): Quadrant | null {
-        if(this.degree == 0) return null;
+    // We don't reach degree 0
+    parentQuadrant(): Quadrant /*| null*/ {
+        //if(this.degree == 0) return null;
         // return new Quadrant(this.degree - 1, <u64>0, <u64>0); // FIXME
         return new Quadrant(this.degree - 1, <u64>(this.x / 2), <u64>(this.y / 2)); // FIXME
     }
@@ -25,8 +26,9 @@ export class Quadrant {
     }
 }
 
-// export const MAX_DEGREE: i32 = 20; // exceeds gas
-export const MAX_DEGREE: i32 = 8//10;
+// Should not exceeds gas
+export const MIN_DEGREE: i32 = 10;
+export const MAX_DEGREE: i32 = 11;
 
 @nearBindgen
 export class Person {
@@ -59,8 +61,8 @@ export function personToQuadrant(person: Person, degree: i32 = MAX_DEGREE): Quad
 
 // TODO: Duplicate code with the below.
 export function addPerson(person: Person): void {
-    for(let quadrant: Quadrant | null = personToQuadrant(person, MAX_DEGREE);
-        quadrant;
+    for(let quadrant: Quadrant = personToQuadrant(person, MAX_DEGREE);
+        quadrant.degree >= MIN_DEGREE;
         quadrant = quadrant.parentQuadrant()
     ) {
         let set = persistentCollectionForQuadrant(quadrant);
@@ -70,8 +72,8 @@ export function addPerson(person: Person): void {
 
 // TODO: Duplicate code with the above.
 export function removePerson(person: Person): void {
-    for(let quadrant: Quadrant | null = personToQuadrant(person, MAX_DEGREE);
-        quadrant;
+    for(let quadrant: Quadrant = personToQuadrant(person, MAX_DEGREE);
+        quadrant.degree >= MIN_DEGREE;
         quadrant = quadrant.parentQuadrant()
     ) {
         let set = persistentCollectionForQuadrant(quadrant);
