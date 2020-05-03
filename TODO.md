@@ -2,9 +2,7 @@
 
 - Display less digits of geo coordinates.
 
-- Order neighbors by distance, show distance; limit the displayed number.
-
-- Notify when data is updated.
+- Notify when my data is updated.
 
 - Add email and phone.
 
@@ -12,5 +10,5 @@
 
 - Design.
 
-- The Earth is considered as a square. This is a problem only near poles where nowhere lives.
+- The Earth is considered as a square. This is mainly a problem only near poles where nowhere lives.
   - However, need to wrap coordinates around.
