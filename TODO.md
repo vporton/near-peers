@@ -11,3 +11,6 @@
 - Keep list of close friends, personal notes on persons.
 
 - Design.
+
+- The Earth is considered as a square. This is a problem only near poles where nowhere lives.
+  - However, need to wrap coordinates around.
