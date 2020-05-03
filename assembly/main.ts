@@ -39,7 +39,7 @@ export function addCoords(account_id: string, latitude: u64, longtitude: u64): v
       quadrant = quadrant.parentQuadrant()
   ) {
       let set = persistentCollectionForQuadrant(quadrant);
-      set.add(account_id);
+      /*if(!set.has(account_id))*/ set.add(account_id);
   }
 }
 

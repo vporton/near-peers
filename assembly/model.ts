@@ -27,7 +27,7 @@ export class Quadrant {
 }
 
 // Should not exceeds gas
-export const MIN_DEGREE: i32 = 10;
+export const MIN_DEGREE: i32 = 11; // 10
 export const MAX_DEGREE: i32 = 11;
 
 @nearBindgen
