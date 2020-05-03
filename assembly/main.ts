@@ -1,7 +1,7 @@
 import { context, logging, storage } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
-import { Person, Coords, allPersons, allPersonCoords, persistentCollectionForQuadrant, addCoords, removeCoords, MAX_DEGREE,
+import { Person, Coords, allPersons, allPersonCoords, persistentCollectionForQuadrant, MAX_DEGREE,
   coordsToQuadrant, Quadrant, MIN_DEGREE } from "./model";
 
 // FIXME: remove
