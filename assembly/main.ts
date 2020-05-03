@@ -10,14 +10,16 @@ export function getWelcome(): string {
 }
 
 export function getPerson(account: string = context.sender): Person | null {
-    return allPersons.get(account, null);
+  return allPersons.get(account, null);
+}
+
+export function getCoords(account: string = context.sender): Coords | null {
+  return allPersonCoords.get(account, null);
 }
 
 export function changePerson(fullname: string,
                              address: string,
-                             description: string,
-                             latitude: i64,
-                             longtitude: i64): void {
+                             description: string): void {
     let person = new Person();
     person.account_id = context.sender;
     person.fullname = fullname;
@@ -59,7 +61,7 @@ export function removeCoords(account_id: string): void {
 export function findNear(entries: i32, account: string = context.sender): Person[] {
     let degree: i32 = MAX_DEGREE;
   
-    const me = getPerson(account);
+    const me = getCoords(account);
     if(!me) return [];
     let quadrant = coordsToQuadrant(me, degree);
 

@@ -97,9 +97,14 @@ class App extends Component {
   async movePerson() {
     const latitude = latitudeToI64(Number(document.getElementById('latitude').value));
     const longtitude = longtitudeToI64(Number(document.getElementById('longtitude').value));
+
+    // Split into two operations, to use less gas on each.
     await this.props.contract.removeCoords({ account_id: accountId });
+    console.log("coords removed");
     await this.props.contract.addCoords({ account_id: accountId, latitude: latitude, longtitude: longtitude });
-    alert("Person coordinates changedd");
+    console.log("coords added");
+
+    alert("Person coordinates changed.");
   }
 
   signedOutFlow() {
@@ -137,7 +142,7 @@ class App extends Component {
           <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
           <p>Latitude: <input type="text" id="latitude" defaultValue={this.state.latitude}/></p>
           <p>Longtitude: <input type="text" id="longtitude" defaultValue={this.state.longtitude}/></p>
-          <p><input type="button" value="Move" onClick={this.movePerson}/></p>
+          <p><input type="button" value="Move" onClick={this.movePerson.bind(this)}/></p>
         </div>
         <div>
           <p>Find
