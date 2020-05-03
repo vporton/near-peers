@@ -33,8 +33,8 @@ export class Person {
     fullname: string;
     address: string;
     description: string;
-    latitude: i64;
-    longtitude: i64;
+    latitude: i64; // 0 = -90 degrees, 2^64-1 = 90 degrees
+    longtitude: i64; // 0 = -180 degrees, 2^64-1 = 180 degrees
 }
 
 @nearBindgen
@@ -50,8 +50,8 @@ export function persistentCollectionForQuadrant(quadrant: Quadrant) : Persistent
 
 export function personToQuadrant(person: Person, degree: i32 = MAX_DEGREE): Quadrant {
     let k: i32 = 1 << degree;
-    const x = i64((person.latitude >> 32) * k);
-    const y = i64((person.longtitude >> 32) * k);
+    const x = i64((person.latitude >> 64) * k);
+    const y = i64((person.longtitude >> 64) * k);
     return new Quadrant(k, x, y);
 }
 
@@ -69,6 +69,7 @@ export function removePerson(person: Person): void {
     for(let degree = MAX_DEGREE; degree >= 0; --degree) {
         let quadrant = personToQuadrant(person, degree);
         let set = persistentCollectionForQuadrant(quadrant);
-        set.delete(person.account_id);
+        if(set.has(person.account_id)) // FIXME: paniced without the check
+            set.delete(person.account_id);
     }
 }

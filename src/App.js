@@ -46,8 +46,8 @@ class App extends Component {
     this.setState({fullname: response.fullname});
     this.setState({address: response.address});
     this.setState({description: response.description});
-    this.setState({latitude: response.latitude});
-    this.setState({longtitude: response.longtitude});
+    this.setState({latitude: (response.latitude / 2**64) * 180 - 90});
+    this.setState({longtitude: (response.longtitude / 2**64) * 360 - 180});
   }
 
   async searchFriends() {
@@ -78,8 +78,8 @@ class App extends Component {
     person.fullname = document.getElementById('fullname').value;
     person.address = document.getElementById('address').value;
     person.description = document.getElementById('description').value;
-    person.latitude = document.getElementById('latitude').value;
-    person.longtitude = document.getElementById('longtitude').value;
+    person.latitude = String(Math.floor(Number(document.getElementById('latitude').value) + 90) / 180 * 2**64);
+    person.longtitude = String(Math.floor(Number(document.getElementById('longtitude').value) + 180) / 360 * 2**64);
     await this.props.contract.changePerson(person);
   }
 
