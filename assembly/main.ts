@@ -28,37 +28,33 @@ export function findNear(entries: number, degree: number = MAX_DEGREE): Person[]
     for(; degree >= 0; --degree) {
       // Iterate nearby quadrants:
       // FIXME: Wrap at edges of the square Earth.
+      function add(quadrant: Quadrant): void {
+          let set = personsMap.get(quadrant);
+          if(set) persons = persons.concat(set.values());
+      }
       ++quadrant.x;
-      let set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
       ++quadrant.y;
-      set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
       --quadrant.x;
-      set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
       --quadrant.x;
-      set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
       --quadrant.y;
-      set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
       --quadrant.y;
-      set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
       ++quadrant.x;
-      set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
       ++quadrant.x;
-      set = personsMap.get(quadrant);
-      if(set) persons = persons.concat(set.values());
+      add(quadrant);
       if(persons.length > entries) break;
 
       let parent = quadrant.parentQuadrant();
