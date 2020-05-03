@@ -5,7 +5,7 @@ import {
 
 // FIXME: We assume that the Earth is square. People living near Earth zero meridian can't find all peers.
 
-class Quadrant {
+export class Quadrant {
     degree: number;
     x: number;
     y: number;
@@ -14,7 +14,7 @@ class Quadrant {
         this.x = x;
         this.y = y;
     }
-    superQuadrant(): Quadrant | null {
+    parentQuadrant(): Quadrant | null {
         if(this.degree == 0) return null;
         return new Quadrant(this.degree - 1, Math.floor(this.x / 2), Math.floor(this.y / 2));
     }
@@ -34,7 +34,7 @@ export class TextMessage {
     text: string; // FIXME: remove
 }
 
-export const persons = new PersistentMap<string, Person>("a"); // account ID -> Person
+export const allPersons = new PersistentMap<string, Person>("a"); // account ID -> Person
 
 export const personsMap = new PersistentMap<Quadrant, PersistentSet<Person>>("m");
 
