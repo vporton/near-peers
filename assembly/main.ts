@@ -1,7 +1,7 @@
 import { context, logging, storage } from "near-sdk-as";
 // available class: context, storage, logging, base58, base64, 
 // PersistentMap, PersistentVector, PersistentDeque, PersistentTopN, ContractPromise, math
-import { TextMessage, Person, Person1, allPersons, persistentCollectionForQuadrant, addPerson, removePerson, MAX_DEGREE,
+import { TextMessage, Person, allPersons, persistentCollectionForQuadrant, addPerson, removePerson, MAX_DEGREE,
   personToQuadrant, Quadrant } from "./model";
 
 // FIXME: remove
