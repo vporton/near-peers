@@ -17,8 +17,8 @@ export class Quadrant {
     }
     parentQuadrant(): Quadrant | null {
         if(this.degree == 0) return null;
-        return new Quadrant(this.degree - 1, <u64>0, <u64>0); // FIXME
-        // return new Quadrant(this.degree - 1, <u64>(this.x / 2), <u64>(this.y / 2)); // FIXME
+        // return new Quadrant(this.degree - 1, <u64>0, <u64>0); // FIXME
+        return new Quadrant(this.degree - 1, <u64>(this.x / 2), <u64>(this.y / 2)); // FIXME
     }
     toString(): String {
         return this.degree.toString() + '/' + this.x.toString() + '/' + this.y.toString();
