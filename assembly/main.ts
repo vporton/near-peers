@@ -9,6 +9,7 @@ export function getPerson(): Person | null {
 }
 
 export function changePerson(person: Person): void {
+    person.account_id = context.sender;
     const oldPerson = getPerson();
     if(!oldPerson) {
         removePerson(person);
