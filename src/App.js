@@ -54,7 +54,7 @@ class App extends Component {
   }
 
   async searchFriends() {
-    const me = await this.props.contract.getPerson({ account: accountId });
+    const me = await this.props.contract.getCoords({ account: accountId });
 
     const quantity = Number(document.getElementById('quantity').value);
     const response = await this.props.contract.findNear({ entries: quantity, account: accountId });
@@ -68,9 +68,12 @@ class App extends Component {
         <td>{person.person.fullname}</td>
         <td>{person.person.address}</td>
         <td>{person.person.description}</td>
-        <td>{distance(me.latitude, me.longtitude, person.coords.latitude, person.coords.longtitude)}</td>
+        <td>{distance(i64ToLatitude(me.latitude),
+                      i64ToLongtitude(me.longtitude),
+                      i64ToLatitude(person.coords.latitude),
+                      i64ToLongtitude(person.coords.longtitude))}</td>
       </tr>
-    })
+    });    
     this.setState({friends: friends});
   }
 
