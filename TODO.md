@@ -2,8 +2,6 @@
 
 - Display less digits of geo coordinates.
 
-- Notify when my data is updated.
-
 - Keep list of close friends, personal notes on persons.
 
 - Design.
