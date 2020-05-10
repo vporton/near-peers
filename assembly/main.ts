@@ -19,12 +19,14 @@ export function getCoords(account: string = context.sender): Coords | null {
 
 export function changePerson(fullname: string,
                              address: string,
-                             description: string): void {
+                             description: string,
+                             phone: string): void {
     let person = new Person();
     person.account_id = context.sender;
     person.fullname = fullname;
     person.address = address;
     person.description = description;
+    person.phone = phone;
     const oldPerson = getPerson();
     if(oldPerson) allPersons.delete(context.sender);
     allPersons.set(context.sender, person);

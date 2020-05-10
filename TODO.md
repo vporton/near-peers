@@ -4,8 +4,6 @@
 
 - Notify when my data is updated.
 
-- Add email and phone? Or keep it secret against spam?
-
 - Keep list of close friends, personal notes on persons.
 
 - Design.

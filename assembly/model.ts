@@ -29,6 +29,7 @@ export class Person {
     fullname: string;
     address: string;
     description: string;
+    phone: string;
 }
 
 @nearBindgen

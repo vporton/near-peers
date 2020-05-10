@@ -49,6 +49,7 @@ class App extends Component {
     this.setState({fullname: response.fullname});
     this.setState({address: response.address});
     this.setState({description: response.description});
+    this.setState({phone: response.phone});
 
     const response2 = await this.props.contract.getCoords({ /*account_id: accountId,*/ account: accountId });
     this.setState({latitude: i64ToLatitude(response2.latitude)});
@@ -69,6 +70,7 @@ class App extends Component {
       return <tr key={person.person.account_id}>
         <td>{person.person.fullname}</td>
         <td>{person.person.address}</td>
+        <td>{person.person.phone}</td>
         <td>{person.person.description}</td>
         <td>{distance(i64ToLatitude(me.latitude),
                       i64ToLongtitude(me.longtitude),
@@ -97,7 +99,8 @@ class App extends Component {
     const fullname = document.getElementById('fullname').value;
     const address = document.getElementById('address').value;
     const description = document.getElementById('description').value;
-    await this.props.contract.changePerson({ account_id: accountId, fullname: fullname, address: address, description: description });
+    const phone = document.getElementById('description').value;
+    await this.props.contract.changePerson({ account_id: accountId, fullname: fullname, address: address, description: description, phone: phone });
     alert("Person data changed.")
   }
 
@@ -144,6 +147,7 @@ class App extends Component {
         <div>
           <p>Full name: <input id="fullname" defaultValue={this.state.fullname}/></p>
           <p>Address: <input id="address" defaultValue={this.state.address}/></p>
+          <p>Phone: <input id="phone" defaultValue={this.state.phone}/></p>
           <p>About you (hobbies, need/want volunteering, your languages, etc.):<br/>
             <textarea id="description" defaultValue={this.state.description}></textarea></p>
           <p><input type="button" value="Change your data" onClick={this.changePerson}/></p>
@@ -166,7 +170,7 @@ class App extends Component {
           </p>
           <table style={{background: 'black'}}>
             <thead>
-              <tr><th>Name</th><th>Address</th><th>About</th><th>km</th></tr>
+              <tr><th>Name</th><th>Address</th><th>Phone</th><th>About</th><th>km</th></tr>
             </thead>
             <tbody>
             {this.state.friends}
