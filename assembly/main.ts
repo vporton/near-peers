@@ -45,8 +45,7 @@ export function addCoords(account_id: string, latitude: u64, longtitude: u64): v
 export function removeCoords(account_id: string): void {
   const coords = allPersonCoords.get(account_id, null);
   if(!coords) return;
-  if(allPersonCoords.contains(account_id)) // FIXME: paniced without the check?
-    allPersonCoords.delete(account_id);
+  allPersonCoords.delete(account_id);
   let quadrant: Quadrant = coordsToQuadrant(coords);
   let set = persistentCollectionForQuadrant(quadrant);
   if(set.has(account_id)) // FIXME: paniced without the check
