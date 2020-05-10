@@ -39,11 +39,13 @@ class App extends Component {
     if (window.location.search.includes("account_id")) {
       window.location.replace(window.location.origin + window.location.pathname)
     }
+    console.log('accountId:', accountId);
     await this.welcome();
   }
 
   async welcome() {
     const response = await this.props.contract.getPerson({ /*account_id: accountId,*/ account: accountId });
+    console.log('response:', response)
     this.setState({fullname: response.fullname});
     this.setState({address: response.address});
     this.setState({description: response.description});
@@ -92,11 +94,10 @@ class App extends Component {
   }
 
   async changePerson() {
-    let person = {};
-    person.fullname = document.getElementById('fullname').value;
-    person.address = document.getElementById('address').value;
-    person.description = document.getElementById('description').value;
-    await this.props.contract.changePerson(person);
+    const fullname = document.getElementById('fullname').value;
+    const address = document.getElementById('address').value;
+    const description = document.getElementById('description').value;
+    await this.props.contract.changePerson({ account_id: accountId, fullname: fullname, address: address, description: description });
     alert("Person data changed.")
   }
 
