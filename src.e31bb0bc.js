@@ -28286,6 +28286,7 @@ if ("development" === 'production') {
   module.exports = require('./cjs/react-dom.development.js');
 }
 },{"./cjs/react-dom.development.js":"../node_modules/react-dom/cjs/react-dom.development.js"}],"../node_modules/regenerator-runtime/runtime.js":[function(require,module,exports) {
+var define;
 /**
  * Copyright (c) 2014-present, Facebook, Inc.
  *
@@ -28303,6 +28304,24 @@ var runtime = (function (exports) {
   var iteratorSymbol = $Symbol.iterator || "@@iterator";
   var asyncIteratorSymbol = $Symbol.asyncIterator || "@@asyncIterator";
   var toStringTagSymbol = $Symbol.toStringTag || "@@toStringTag";
+
+  function define(obj, key, value) {
+    Object.defineProperty(obj, key, {
+      value: value,
+      enumerable: true,
+      configurable: true,
+      writable: true
+    });
+    return obj[key];
+  }
+  try {
+    // IE 8 has a broken Object.defineProperty that only works on DOM objects.
+    define({}, "");
+  } catch (err) {
+    define = function(obj, key, value) {
+      return obj[key] = value;
+    };
+  }
 
   function wrap(innerFn, outerFn, self, tryLocsList) {
     // If outerFn provided and outerFn.prototype is a Generator, then outerFn.prototype instanceof Generator.
@@ -28374,16 +28393,19 @@ var runtime = (function (exports) {
     Generator.prototype = Object.create(IteratorPrototype);
   GeneratorFunction.prototype = Gp.constructor = GeneratorFunctionPrototype;
   GeneratorFunctionPrototype.constructor = GeneratorFunction;
-  GeneratorFunctionPrototype[toStringTagSymbol] =
-    GeneratorFunction.displayName = "GeneratorFunction";
+  GeneratorFunction.displayName = define(
+    GeneratorFunctionPrototype,
+    toStringTagSymbol,
+    "GeneratorFunction"
+  );
 
   // Helper for defining the .next, .throw, and .return methods of the
   // Iterator interface in terms of a single ._invoke method.
   function defineIteratorMethods(prototype) {
     ["next", "throw", "return"].forEach(function(method) {
-      prototype[method] = function(arg) {
+      define(prototype, method, function(arg) {
         return this._invoke(method, arg);
-      };
+      });
     });
   }
 
@@ -28402,9 +28424,7 @@ var runtime = (function (exports) {
       Object.setPrototypeOf(genFun, GeneratorFunctionPrototype);
     } else {
       genFun.__proto__ = GeneratorFunctionPrototype;
-      if (!(toStringTagSymbol in genFun)) {
-        genFun[toStringTagSymbol] = "GeneratorFunction";
-      }
+      define(genFun, toStringTagSymbol, "GeneratorFunction");
     }
     genFun.prototype = Object.create(Gp);
     return genFun;
@@ -28674,7 +28694,7 @@ var runtime = (function (exports) {
   // unified ._invoke helper method.
   defineIteratorMethods(Gp);
 
-  Gp[toStringTagSymbol] = "Generator";
+  define(Gp, toStringTagSymbol, "Generator");
 
   // A Generator should always return itself as the iterator object when the
   // @@iterator function is called on it. Some browsers' implementations of the
@@ -29216,6 +29236,7 @@ class App extends _react.Component {
       window.location.replace(window.location.origin + window.location.pathname);
     }
 
+    console.log('accountId:', accountId);
     await this.welcome();
   }
 
@@ -29224,6 +29245,7 @@ class App extends _react.Component {
       /*account_id: accountId,*/
       account: accountId
     });
+    console.log('response:', response);
     this.setState({
       fullname: response.fullname
     });
@@ -29232,6 +29254,9 @@ class App extends _react.Component {
     });
     this.setState({
       description: response.description
+    });
+    this.setState({
+      phone: response.phone
     });
     const response2 = await this.props.contract.getCoords({
       /*account_id: accountId,*/
@@ -29260,7 +29285,7 @@ class App extends _react.Component {
     const friends = response.map((person, index) => {
       return /*#__PURE__*/_react.default.createElement("tr", {
         key: person.person.account_id
-      }, /*#__PURE__*/_react.default.createElement("td", null, person.person.fullname), /*#__PURE__*/_react.default.createElement("td", null, person.person.address), /*#__PURE__*/_react.default.createElement("td", null, person.person.description), /*#__PURE__*/_react.default.createElement("td", null, (0, _earth.distance)((0, _earth.i64ToLatitude)(me.latitude), (0, _earth.i64ToLongtitude)(me.longtitude), (0, _earth.i64ToLatitude)(person.coords.latitude), (0, _earth.i64ToLongtitude)(person.coords.longtitude))));
+      }, /*#__PURE__*/_react.default.createElement("td", null, person.person.fullname), /*#__PURE__*/_react.default.createElement("td", null, person.person.address), /*#__PURE__*/_react.default.createElement("td", null, person.person.phone), /*#__PURE__*/_react.default.createElement("td", null, person.person.description), /*#__PURE__*/_react.default.createElement("td", null, (0, _earth.distance)((0, _earth.i64ToLatitude)(me.latitude), (0, _earth.i64ToLongtitude)(me.longtitude), (0, _earth.i64ToLatitude)(person.coords.latitude), (0, _earth.i64ToLongtitude)(person.coords.longtitude))));
     });
     this.setState({
       friends: friends
@@ -29279,11 +29304,17 @@ class App extends _react.Component {
   }
 
   async changePerson() {
-    let person = {};
-    person.fullname = document.getElementById('fullname').value;
-    person.address = document.getElementById('address').value;
-    person.description = document.getElementById('description').value;
-    await this.props.contract.changePerson(person);
+    const fullname = document.getElementById('fullname').value;
+    const address = document.getElementById('address').value;
+    const description = document.getElementById('description').value;
+    const phone = document.getElementById('description').value;
+    await this.props.contract.changePerson({
+      account_id: accountId,
+      fullname: fullname,
+      address: address,
+      description: description,
+      phone: phone
+    });
     alert("Person data changed.");
   }
 
@@ -29345,6 +29376,9 @@ class App extends _react.Component {
     })), /*#__PURE__*/_react.default.createElement("p", null, "Address: ", /*#__PURE__*/_react.default.createElement("input", {
       id: "address",
       defaultValue: this.state.address
+    })), /*#__PURE__*/_react.default.createElement("p", null, "Phone: ", /*#__PURE__*/_react.default.createElement("input", {
+      id: "phone",
+      defaultValue: this.state.phone
     })), /*#__PURE__*/_react.default.createElement("p", null, "About you (hobbies, need/want volunteering, your languages, etc.):", /*#__PURE__*/_react.default.createElement("br", null), /*#__PURE__*/_react.default.createElement("textarea", {
       id: "description",
       defaultValue: this.state.description
@@ -29374,7 +29408,7 @@ class App extends _react.Component {
       style: {
         background: 'black'
       }
-    }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", null, "Name"), /*#__PURE__*/_react.default.createElement("th", null, "Address"), /*#__PURE__*/_react.default.createElement("th", null, "About"), /*#__PURE__*/_react.default.createElement("th", null, "km"))), /*#__PURE__*/_react.default.createElement("tbody", null, this.state.friends))), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
+    }, /*#__PURE__*/_react.default.createElement("thead", null, /*#__PURE__*/_react.default.createElement("tr", null, /*#__PURE__*/_react.default.createElement("th", null, "Name"), /*#__PURE__*/_react.default.createElement("th", null, "Address"), /*#__PURE__*/_react.default.createElement("th", null, "Phone"), /*#__PURE__*/_react.default.createElement("th", null, "About"), /*#__PURE__*/_react.default.createElement("th", null, "km"))), /*#__PURE__*/_react.default.createElement("tbody", null, this.state.friends))), /*#__PURE__*/_react.default.createElement("div", null, /*#__PURE__*/_react.default.createElement("div", {
       className: "logo-wrapper"
     }, /*#__PURE__*/_react.default.createElement("img", {
       src: _near.default,
@@ -29392,7 +29426,7 @@ class App extends _react.Component {
 var _default = App;
 exports.default = _default;
 },{"regenerator-runtime/runtime":"../node_modules/regenerator-runtime/runtime.js","react":"../node_modules/react/index.js","./assets/logo.svg":"assets/logo.svg","./assets/gray_near_logo.svg":"assets/gray_near_logo.svg","./assets/near.svg":"assets/near.svg","./App.css":"App.css","./earth":"earth.js"}],"config.js":[function(require,module,exports) {
-const CONTRACT_NAME = "dev-1588542478441" || 'nearpeers3';
+const CONTRACT_NAME = "dev-1588761759900" || 'nearpeers5';
 
 function getConfig(env) {
   switch (env) {
@@ -31626,7 +31660,7 @@ function setProtoOf (obj, proto) {
 
 function mixinProperties (obj, proto) {
   for (var prop in proto) {
-    if (!obj.hasOwnProperty(prop)) {
+    if (!Object.prototype.hasOwnProperty.call(obj, prop)) {
       obj[prop] = proto[prop]
     }
   }
@@ -31886,7 +31920,8 @@ var toIdentifier = require('toidentifier');
 
 
 module.exports = createError;
-module.exports.HttpError = createHttpErrorConstructor(); // Populate exports for all constructors
+module.exports.HttpError = createHttpErrorConstructor();
+module.exports.isHttpError = createIsHttpErrorFunction(module.exports.HttpError); // Populate exports for all constructors
 
 populateConstructorExports(module.exports, statuses.codes, module.exports.HttpError);
 /**
@@ -31993,7 +32028,7 @@ function createHttpErrorConstructor() {
 
 
 function createClientErrorConstructor(HttpError, name, code) {
-  var className = name.match(/Error$/) ? name : name + 'Error';
+  var className = toClassName(name);
 
   function ClientError(message) {
     // create the error object
@@ -32028,13 +32063,32 @@ function createClientErrorConstructor(HttpError, name, code) {
   return ClientError;
 }
 /**
+ * Create function to test is a value is a HttpError.
+ * @private
+ */
+
+
+function createIsHttpErrorFunction(HttpError) {
+  return function isHttpError(val) {
+    if (!val || typeof val !== 'object') {
+      return false;
+    }
+
+    if (val instanceof HttpError) {
+      return true;
+    }
+
+    return val instanceof Error && typeof val.expose === 'boolean' && typeof val.statusCode === 'number' && val.status === val.statusCode;
+  };
+}
+/**
  * Create a constructor for a server error.
  * @private
  */
 
 
 function createServerErrorConstructor(HttpError, name, code) {
-  var className = name.match(/Error$/) ? name : name + 'Error';
+  var className = toClassName(name);
 
   function ServerError(message) {
     // create the error object
@@ -32112,6 +32166,15 @@ function populateConstructorExports(exports, codes, HttpError) {
 
   exports["I'mateapot"] = deprecate.function(exports.ImATeapot, '"I\'mateapot"; use "ImATeapot" instead');
 }
+/**
+ * Get a class name from a name identifier.
+ * @private
+ */
+
+
+function toClassName(name) {
+  return name.substr(-5) !== 'Error' ? name + 'Error' : name;
+}
 },{"depd":"../node_modules/depd/lib/browser/index.js","setprototypeof":"../node_modules/setprototypeof/index.js","statuses":"../node_modules/statuses/index.js","inherits":"../node_modules/inherits/inherits_browser.js","toidentifier":"../node_modules/toidentifier/index.js"}],"../node_modules/node-fetch/browser.js":[function(require,module,exports) {
 
 "use strict"; // ref: https://github.com/tc39/proposal-global
@@ -32138,7 +32201,10 @@ var getGlobal = function () {
 var global = getGlobal();
 module.exports = exports = global.fetch; // Needed for TypeScript and Webpack.
 
-exports.default = global.fetch.bind(global);
+if (global.fetch) {
+  exports.default = global.fetch.bind(global);
+}
+
 exports.Headers = global.Headers;
 exports.Request = global.Request;
 exports.Response = global.Response;
@@ -32528,7 +32594,8 @@ function EventEmitter() {
   EventEmitter.init.call(this);
 }
 
-module.exports = EventEmitter; // Backwards-compat with node 0.10.x
+module.exports = EventEmitter;
+module.exports.once = once; // Backwards-compat with node 0.10.x
 
 EventEmitter.EventEmitter = EventEmitter;
 EventEmitter.prototype._events = undefined;
@@ -32882,6 +32949,37 @@ function unwrapListeners(arr) {
   }
 
   return ret;
+}
+
+function once(emitter, name) {
+  return new Promise(function (resolve, reject) {
+    function eventListener() {
+      if (errorListener !== undefined) {
+        emitter.removeListener('error', errorListener);
+      }
+
+      resolve([].slice.call(arguments));
+    }
+
+    ;
+    var errorListener; // Adding an error listener is not optional because
+    // if an error is thrown on an event emitter we cannot
+    // guarantee that the actual event we are waiting will
+    // be fired. The result could be a silent way to create
+    // memory or file descriptor leaks, which is something
+    // we should avoid.
+
+    if (name !== 'error') {
+      errorListener = function errorListener(err) {
+        emitter.removeListener(name, eventListener);
+        reject(err);
+      };
+
+      emitter.once('error', errorListener);
+    }
+
+    emitter.once(name, eventListener);
+  });
 }
 },{}],"../node_modules/readable-stream/lib/internal/streams/stream-browser.js":[function(require,module,exports) {
 module.exports = require('events').EventEmitter;
@@ -38035,6 +38133,7 @@ exports.TypedError = TypedError;
 
 },{}],"../node_modules/safe-buffer/index.js":[function(require,module,exports) {
 
+/*! safe-buffer. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 /* eslint-disable node/no-deprecated-api */
 var buffer = require('buffer')
 var Buffer = buffer.Buffer
@@ -38605,7 +38704,11 @@ var Buffer = require("buffer").Buffer;
   // Check Symbol.for because not everywhere where Symbol defined
   // See https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Symbol#Browser_compatibility
   if (typeof Symbol !== 'undefined' && typeof Symbol.for === 'function') {
-    BN.prototype[Symbol.for('nodejs.util.inspect.custom')] = inspect;
+    try {
+      BN.prototype[Symbol.for('nodejs.util.inspect.custom')] = inspect;
+    } catch (e) {
+      BN.prototype.inspect = inspect;
+    }
   } else {
     BN.prototype.inspect = inspect;
   }
@@ -41308,7 +41411,13 @@ var Buffer = require("buffer").Buffer;
     } else if (cmp > 0) {
       r.isub(this.p);
     } else {
-      r._strip();
+      if (r.strip !== undefined) {
+        // r is a BN v4 instance
+        r.strip();
+      } else {
+        // r is a BN v5 instance
+        r._strip();
+      }
     }
 
     return r;
@@ -50288,7 +50397,7 @@ var parent = module.bundle.parent;
 if ((!parent || !parent.isParcelRequire) && typeof WebSocket !== 'undefined') {
   var hostname = "" || location.hostname;
   var protocol = location.protocol === 'https:' ? 'wss' : 'ws';
-  var ws = new WebSocket(protocol + '://' + hostname + ':' + "37621" + '/');
+  var ws = new WebSocket(protocol + '://' + hostname + ':' + "39805" + '/');
 
   ws.onmessage = function (event) {
     checkedAssets = {};
